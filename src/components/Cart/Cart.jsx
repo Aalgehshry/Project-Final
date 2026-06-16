@@ -83,7 +83,7 @@ export default function Cart() {
   }
 
   return (
-    <div>
+    <div className="container py-5 my-5 p-5 bg-slate-300 rounded">
       {pageLoading ? (
         <div className="sk-cube-grid">
           <div className="sk-cube sk-cube1"></div>
