@@ -100,14 +100,14 @@ export default function Cart() {
 
   if (!cartDetails?.products?.length) {
     return (
-      <h2 className="text-center text-xl text-gray-700 mt-5">
+      <h2 className="text-4xl font-semibold text-emerald-600 text-center">
         Cart is empty
       </h2>
     );
   }
 
   return (
-    <div>
+    <div className="container py-5 my-5 p-5 bg-slate-300 rounded">
       <h2 className="text-center text-2xl text-emerald-600 font-bold my-4">
         Total Price: {cartDetails?.totalCartPrice} EGP
       </h2>
