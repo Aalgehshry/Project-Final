@@ -23,15 +23,18 @@ export default function WishlistContextProvider({ children }) {
   }, [api]);
 
   const getWishlist = useCallback(async () => {
-    try {
-      const res = await api.get("/wishlist");
-      setWishlistItems(res.data.data);
-      setWishlistCount(res.data.count);
-      return res;
-    } catch (error) {
-      console.log(error);
-    }
-  }, [api]);
+  // ✅ لو مافي token لا ترسل الـ request
+  if (!localStorage.getItem("userToken")) return;
+  
+  try {
+    const res = await api.get("/wishlist");
+    setWishlistItems(res.data.data);
+    setWishlistCount(res.data.count);
+    return res;
+  } catch (err) {
+    console.log(err);
+  }
+}, [api]);
 
   const addProductToWishlist = async (productId) => {
     try {
