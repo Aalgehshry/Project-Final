@@ -22,6 +22,7 @@ export default function Cart() {
     try {
       const response = await getLoggedUserCart();
       if (response.data.status === "success") {
+       console.log(response.data.data);
         setCartDetails(response.data.data);
       }
     } catch (error) {
