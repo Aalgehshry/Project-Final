@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { CartContext } from "../../Context/CartContext";
 import { Link } from "react-router-dom";
+import { toast } from 'react-hot-toast';
 
 export default function Wishlist() {
   let { getWishlist, removeFromWishlist, addProductToCart,
