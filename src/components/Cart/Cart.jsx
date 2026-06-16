@@ -21,8 +21,8 @@ export default function Cart() {
   async function getCartItem() {
     try {
       const response = await getLoggedUserCart();
+      console.log(response.data.data);
       if (response.data.status === "success") {
-       console.log(response.data.data);
         setCartDetails(response.data.data);
       }
     } catch (error) {
