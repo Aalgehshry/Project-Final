@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { CartContext } from "../../Context/CartContext";
-import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function Cart() {
   const {
@@ -18,22 +18,23 @@ export default function Cart() {
   const [currentId, setCurrentId] = useState(null);
   const [loadingStates, setLoadingStates] = useState({});
 
-  // 🔹 جلب الكارت
-  async function getCartItem() {
-    try {
-      const response = await getLoggedUserCart();
-
-      if (response?.data?.status === "success") {
-        setCartDetails(response.data.data);
+  useEffect(() => {
+    async function getCartItem() {
+      try {
+        const response = await getLoggedUserCart();
+        if (response?.data?.status === "success") {
+          setCartDetails(response.data.data);
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setPageLoading(false);
       }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setPageLoading(false);
     }
-  }
 
-  // 🔹 تحديث الكمية
+    getCartItem();
+  }, [getLoggedUserCart]);
+
   async function updateProduct(id, count, action) {
     if (count <= 0) {
       return deleteItem(id);
@@ -46,7 +47,6 @@ export default function Cart() {
 
     try {
       const response = await updateCartProductQuantity(id, count);
-
       if (response?.data?.status === "success") {
         setCartDetails(response.data.data);
         toast.success("Updated successfully");
@@ -62,14 +62,12 @@ export default function Cart() {
     }
   }
 
-  // 🔹 حذف منتج
   async function deleteItem(productId) {
     setActionLoading(true);
     setCurrentId(productId);
 
     try {
       const response = await deleteCartItem(productId);
-
       if (response?.data?.status === "success") {
         setCartDetails(response.data.data);
         setNumberItem(numberItem - 1);
@@ -84,11 +82,6 @@ export default function Cart() {
     }
   }
 
-  useEffect(() => {
-    getCartItem();
-  }, []);
-
-  // 🔴 Loading أول مرة فقط
   if (pageLoading) {
     return (
       <div className="sk-cube-grid">
@@ -105,14 +98,16 @@ export default function Cart() {
     );
   }
 
-  // 🔴 لو السلة فاضية
   if (!cartDetails?.products?.length) {
-    return <h2 className="text-center text-xl text-gray-700 mt-5">Cart is empty</h2>;
+    return (
+      <h2 className="text-center text-xl text-gray-700 mt-5">
+        Cart is empty
+      </h2>
+    );
   }
-  // 🔵 UI الأساسي
+
   return (
-    <div >
-      
+    <div>
       <h2 className="text-center text-2xl text-emerald-600 font-bold my-4">
         Total Price: {cartDetails?.totalCartPrice} EGP
       </h2>
@@ -148,15 +143,9 @@ export default function Cart() {
                   <div className="flex items-center">
                     <button
                       onClick={() =>
-                        updateProduct(
-                          item.product.id,
-                          item.count - 1,
-                          "dec"
-                        )
+                        updateProduct(item.product.id, item.count - 1, "dec")
                       }
-                      disabled={
-                        loadingStates[item.product.id + "dec"]
-                      }
+                      disabled={loadingStates[item.product.id + "dec"]}
                     >
                       -
                     </button>
@@ -165,15 +154,9 @@ export default function Cart() {
 
                     <button
                       onClick={() =>
-                        updateProduct(
-                          item.product.id,
-                          item.count + 1,
-                          "inc"
-                        )
+                        updateProduct(item.product.id, item.count + 1, "inc")
                       }
-                      disabled={
-                        loadingStates[item.product.id + "inc"]
-                      }
+                      disabled={loadingStates[item.product.id + "inc"]}
                     >
                       +
                     </button>
@@ -189,8 +172,7 @@ export default function Cart() {
                     onClick={() => deleteItem(item.product.id)}
                     className="text-red-500"
                   >
-                    {actionLoading &&
-                    currentId === item.product.id
+                    {actionLoading && currentId === item.product.id
                       ? "Loading..."
                       : "Remove"}
                   </button>
