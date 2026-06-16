@@ -20,82 +20,76 @@ export default function CreateContextProvider(props) {
         { productId },
         { headers: getHeaders() }
       );
+
       if (response.data.status === "success") {
         setNumberItem(response.data.numOfCartItems);
       }
+
       return response;
     } catch (err) {
       console.error("Error adding product to cart:", err);
+      throw err;
     }
   }
 
   // ✅ جلب بيانات السلة للمستخدم المسجل
-   function getLoggedUserCart() {
-    return  axios.get(`https://ecommerce.routemisr.com/api/v1/cart`,
-        { headers: getHeaders() })
-      .then((response)=>{
-
+  function getLoggedUserCart() {
+    return axios
+      .get(`https://ecommerce.routemisr.com/api/v1/cart`, {
+        headers: getHeaders(),
+      })
+      .then((response) => {
         if (response.data.status === "success") {
           setNumberItem(response.data.numOfCartItems);
           setCartId(response.data.data._id);
         }
-        // console.log(response.data.data._id);
-        
+
         return response;
       })
-    .catch (()=>{
-      console.error("Error fetching cart:", err);
-    })
+      .catch((err) => {
+        console.error("Error fetching cart:", err);
+        throw err;
+      });
   }
 
-
+  // ✅ تحديث كمية المنتج
   async function updateCartProductQuantity(productId, count) {
     try {
-      let response = await axios.put(
+      const response = await axios.put(
         `https://ecommerce.routemisr.com/api/v1/cart/${productId}`,
         { count },
         { headers: getHeaders() }
       );
+
       return response;
     } catch (error) {
       console.error("Error updating product quantity:", error);
+      throw error;
     }
   }
-  
+
+  // ✅ حذف منتج من السلة
   async function deleteCartItem(productId) {
     try {
-      let response = await axios.delete(
+      const response = await axios.delete(
         `https://ecommerce.routemisr.com/api/v1/cart/${productId}`,
         { headers: getHeaders() }
       );
+
       return response;
     } catch (error) {
       console.error("Error deleting cart item:", error);
+      throw error;
     }
   }
 
-  // async function Checkout(cartId, url, formData) {
-  //   return axios
-  //     .post(
-  //      ` https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cartId}?url=${url}`,
-
-  //      { headers: getHeaders()},
-  //       {
-  //         shippingAddress: formData,
-  //       }
-  //     )
-  //     .then((res) => res)
-  //     .catch((err) => err);
-  // }
-
-  // ✅ تفريغ السلة بالكامل
-  
+  // ✅ Checkout
   async function Checkout(cardId, url, formData) {
     return axios
       .post(
         `https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cardId}?url=${url}`,
-        { shippingAddress: formData }, // البيانات المُرسلة
-        { headers: getHeaders() }      // الهيدرز
+        { shippingAddress: formData },
+        { headers: getHeaders() }
       )
       .then((res) => res)
       .catch((err) => {
@@ -104,33 +98,40 @@ export default function CreateContextProvider(props) {
       });
   }
 
+  // ✅ تفريغ السلة بالكامل
   async function clearCart() {
     try {
       const response = await axios.delete(
         `https://ecommerce.routemisr.com/api/v1/cart`,
         { headers: getHeaders() }
       );
+
       if (response.data.status === "success") {
         setNumberItem(0);
         setCartId(null);
       }
+
       return response;
     } catch (err) {
       console.error("Error clearing cart:", err);
+      throw err;
     }
   }
 
-  // ✅ جلب قائمة الأمنيات (Wishlist)
+  // ✅ جلب قائمة الأمنيات
   async function getWishlist() {
     try {
       const response = await axios.get(
         `https://ecommerce.routemisr.com/api/v1/wishlist`,
         { headers: getHeaders() }
       );
+
       setWishCount(response.data.count || 0);
+
       return response;
     } catch (err) {
       console.error("Error fetching wishlist:", err);
+      throw err;
     }
   }
 
@@ -142,10 +143,13 @@ export default function CreateContextProvider(props) {
         { productId },
         { headers: getHeaders() }
       );
+
       await getWishlist();
+
       return response;
     } catch (err) {
       console.error("Error adding to wishlist:", err);
+      throw err;
     }
   }
 
@@ -156,10 +160,13 @@ export default function CreateContextProvider(props) {
         `https://ecommerce.routemisr.com/api/v1/wishlist/${productId}`,
         { headers: getHeaders() }
       );
+
       await getWishlist();
+
       return response;
     } catch (err) {
       console.error("Error removing from wishlist:", err);
+      throw err;
     }
   }
 
@@ -172,26 +179,25 @@ export default function CreateContextProvider(props) {
 
   return (
     <CartContext.Provider
-    value={{
-      Checkout,
-      addProductToCart,
-      getLoggedUserCart,
-      addToWishlist,
-      removeFromWishlist,
-      getWishlist,
-      updateCartProductQuantity,  // ✅ تم إصلاح الاسم وتمرير الدالة
-      deleteCartItem,             // ✅ تم إصلاح الاسم وتمرير الدالة
-      setWishCount,
-      clearCart,
-      
-      wishcount,
-      numberItem,
-      cartId,
-      setNumberItem,
-    }}
-  >
-    {props.children}
-  </CartContext.Provider>
-  
+      value={{
+        Checkout,
+        addProductToCart,
+        getLoggedUserCart,
+        addToWishlist,
+        removeFromWishlist,
+        getWishlist,
+        updateCartProductQuantity,
+        deleteCartItem,
+        setWishCount,
+        clearCart,
+
+        wishcount,
+        numberItem,
+        cartId,
+        setNumberItem,
+      }}
+    >
+      {props.children}
+    </CartContext.Provider>
   );
 }
