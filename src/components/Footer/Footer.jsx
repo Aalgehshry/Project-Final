@@ -7,7 +7,7 @@ import googleplay from '../../assets/images2.png'
 export default function Footer() {
   return (
     <>
-  <footer className="bg-gray-200  bottom-0 right-0 left-0 p-5">
+  <footer className="bg-gray-200 ">
       <div className="container mx-auto">
         <h4 className="font-bold text-lg">Get The Fresh Cart App</h4>
         <p className="text-gray-600">
