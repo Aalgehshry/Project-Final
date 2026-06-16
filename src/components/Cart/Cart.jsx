@@ -107,12 +107,11 @@ export default function Cart() {
 
   // 🔴 لو السلة فاضية
   if (!cartDetails?.products?.length) {
-    return <h2 className="text-center text-xl mt-10">Cart is empty</h2>;
+    return <h2 className="text-center text-xl text-gray-700 mt-5">Cart is empty</h2>;
   }
-
   // 🔵 UI الأساسي
   return (
-    <div  className="container py-5 my-5 p-5 bg-slate-300 rounded>
+    <div >
       
       <h2 className="text-center text-2xl text-emerald-600 font-bold my-4">
         Total Price: {cartDetails?.totalCartPrice} EGP
