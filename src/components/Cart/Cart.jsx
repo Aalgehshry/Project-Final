@@ -112,7 +112,8 @@ export default function Cart() {
 
   // 🔵 UI الأساسي
   return (
-    <div>
+    <div  className="container py-5 my-5 p-5 bg-slate-300 rounded>
+      
       <h2 className="text-center text-2xl text-emerald-600 font-bold my-4">
         Total Price: {cartDetails?.totalCartPrice} EGP
       </h2>
