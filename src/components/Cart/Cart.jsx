@@ -19,17 +19,18 @@ export default function Cart() {
   const [isLoading, setIsLoading] = useState(true);
   
   async function getCartItem() {
-    try {
-      const response = await getLoggedUserCart();
+  try {
+    const response = await getLoggedUserCart();
 
-      if (response?.data?.status === "success") {
-        setCartDetails(response.data.data);
-      }
-    } catch (error) {
-      console.error("Error fetching cart items:", error);
-    }  finally {
+    if (response?.data?.status === "success") {
+      setCartDetails(response.data.data);
+    }
+  } catch (error) {
+    console.error("Error fetching cart items:", error);
+  } finally {
     setIsLoading(false);
   }
+}
 
   async function updateProduct(id, count, action) {
     if (count <= 0) {
@@ -90,6 +91,7 @@ export default function Cart() {
     getCartItem();
   }, []);
 
+  if (isLoading) {
   return (
     <>
       {cartDetails?.products?.length > 0 ? (
@@ -223,7 +225,7 @@ export default function Cart() {
             </Link>
           </div>
         </>
-      ) : if (isLoading) (
+      ) : 
         <div className="sk-cube-grid">
           <div className="sk-cube sk-cube1"></div>
           <div className="sk-cube sk-cube2"></div>
@@ -238,4 +240,5 @@ export default function Cart() {
       )}
     </>
   );
+}
 }
