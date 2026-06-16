@@ -16,7 +16,8 @@ export default function Cart() {
   const [Loading, setLoading] = useState(false);
   const [currentId, setcurrentId] = useState(0);
   const [loadingStates, setLoadingStates] = useState({});
-
+  const [isLoading, setIsLoading] = useState(true);
+  
   async function getCartItem() {
     try {
       const response = await getLoggedUserCart();
@@ -26,7 +27,8 @@ export default function Cart() {
       }
     } catch (error) {
       console.error("Error fetching cart items:", error);
-    }
+    }  finally {
+    setIsLoading(false);
   }
 
   async function updateProduct(id, count, action) {
@@ -221,7 +223,7 @@ export default function Cart() {
             </Link>
           </div>
         </>
-      ) : (
+      ) : if (isLoading) (
         <div className="sk-cube-grid">
           <div className="sk-cube sk-cube1"></div>
           <div className="sk-cube sk-cube2"></div>
