@@ -1,7 +1,8 @@
 import axios from "axios";
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback, useMemo, createContext } from "react";
 import PropTypes from "prop-types";
-import { WishlistContext } from "./WishlistContext";
+
+export const WishlistContext = createContext();
 
 export default function WishlistContextProvider({ children }) {
   const [wishlistItems, setWishlistItems] = useState([]);
